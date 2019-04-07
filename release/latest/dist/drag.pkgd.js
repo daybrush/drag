@@ -4,7 +4,7 @@ name: @daybrush/drag
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/drag.git
-version: 0.4.0
+version: 0.4.1
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -28,7 +28,7 @@ version: 0.4.0
           _b = options.events,
           events = _b === void 0 ? ["touch", "mouse"] : _b;
       var isTouch = events.indexOf("touch") > -1;
-      var isMouse = events.indexOf("touch") > -1;
+      var isMouse = events.indexOf("mouse") > -1;
 
       function getPosition(e) {
         return e.touches && e.touches.length ? e.touches[0] : e;
