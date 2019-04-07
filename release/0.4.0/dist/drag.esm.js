@@ -13,6 +13,7 @@ function setDrag(el, options) {
   var prevX = 0;
   var prevY = 0;
   var datas = {};
+  var isDrag = false;
   var _a = options.container,
       container = _a === void 0 ? el : _a,
       dragstart = options.dragstart,
@@ -29,6 +30,7 @@ function setDrag(el, options) {
 
   function onDragStart(e) {
     flag = true;
+    isDrag = false;
 
     var _a = getPosition(e),
         clientX = _a.clientX,
@@ -57,6 +59,7 @@ function setDrag(el, options) {
         clientX = _a.clientX,
         clientY = _a.clientY;
 
+    isDrag = true;
     drag && drag({
       datas: datas,
       clientX: clientX,
@@ -79,6 +82,7 @@ function setDrag(el, options) {
     flag = false;
     dragend && dragend({
       datas: datas,
+      isDrag: isDrag,
       inputEvent: e,
       clientX: prevX,
       clientY: prevY,
