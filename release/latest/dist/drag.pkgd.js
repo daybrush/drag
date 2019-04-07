@@ -4,7 +4,7 @@ name: @daybrush/drag
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/drag.git
-version: 0.2.0
+version: 0.3.0
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -16,6 +16,8 @@ version: 0.2.0
       var flag = false;
       var startX = 0;
       var startY = 0;
+      var prevX = 0;
+      var prevY = 0;
       var datas = {};
       var _a = options.container,
           container = _a === void 0 ? el : _a,
@@ -40,10 +42,14 @@ version: 0.2.0
 
         startX = clientX;
         startY = clientY;
+        prevX = clientX;
+        prevY = clientY;
         datas = {};
         (dragstart && dragstart({
           datas: datas,
-          inputEvent: e
+          inputEvent: e,
+          clientX: clientX,
+          clientY: clientY
         })) === false && (flag = false);
         flag && e.preventDefault();
       }
@@ -58,13 +64,17 @@ version: 0.2.0
             clientY = _a.clientY;
 
         drag && drag({
+          datas: datas,
           clientX: clientX,
           clientY: clientY,
-          deltaX: clientX - startX,
-          deltaY: clientY - startY,
-          datas: datas,
+          distX: clientX - startX,
+          distY: clientY - startY,
+          deltaX: clientX - prevX,
+          deltaY: clientY - prevY,
           inputEvent: e
         });
+        prevX = clientX;
+        prevY = clientY;
       }
 
       function onDragEnd(e) {
