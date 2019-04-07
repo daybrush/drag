@@ -1,0 +1,33 @@
+{
+  "name": "@daybrush/drag",
+  "version": "0.0.1",
+  "description": "add drag event",
+  "main": "./dist/drag.js",
+  "module": "./dist/drag.esm.js",
+  "sideEffects": false,
+  "types": "declaration/index.d.ts",
+  "scripts": {
+    "build": "rollup -c && npm run declaration",
+    "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+    "release": "npm run build && release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daybrush/drag.git"
+  },
+  "author": "Daybrush",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daybrush/drag/issues"
+  },
+  "homepage": "https://github.com/daybrush/drag#readme",
+  "dependencies": {
+    "@daybrush/utils": "^0.7.0"
+  },
+  "devDependencies": {
+    "@daybrush/builder": "0.0.2",
+    "@daybrush/release": "0.0.6",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.2"
+  }
+}
