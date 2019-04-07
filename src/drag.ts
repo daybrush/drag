@@ -30,7 +30,7 @@ export default function setDrag(el: Element, options: DragOptions) {
 
         const { clientX, clientY } = getPosition(e);
 
-        drag && drag({ deltaX: clientX - startX, deltaY: clientY - startY, datas });
+        drag && drag({clientX, clientY, deltaX: clientX - startX, deltaY: clientY - startY, datas });
     }
     function onDragEnd() {
         if (!flag) {
