@@ -4,7 +4,7 @@ name: @daybrush/drag
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/drag.git
-version: 0.3.0
+version: 0.4.0
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -85,7 +85,11 @@ version: 0.3.0
         flag = false;
         dragend && dragend({
           datas: datas,
-          inputEvent: e
+          inputEvent: e,
+          clientX: prevX,
+          clientY: prevY,
+          distX: prevX - startX,
+          distY: prevY - startY
         });
       }
 
