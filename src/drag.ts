@@ -4,11 +4,14 @@ export default function setDrag(el: Element, options: DragOptions) {
     let flag = false;
     let startX = 0;
     let startY = 0;
+    let prevX = 0;
+    let prevY = 0;
     let datas = {};
+    let isDrag = false;
 
     const { container = el, dragstart, drag, dragend, events = ["touch", "mouse"] } = options;
     const isTouch = events.indexOf("touch") > -1;
-    const isMouse = events.indexOf("touch") > -1;
+    const isMouse = events.indexOf("mouse") > -1;
 
     function getPosition(e) {
         return e.touches && e.touches.length ? e.touches[0] : e;
@@ -16,12 +19,15 @@ export default function setDrag(el: Element, options: DragOptions) {
 
     function onDragStart(e) {
         flag = true;
+        isDrag = false;
         const { clientX, clientY } = getPosition(e);
 
         startX = clientX;
         startY = clientY;
+        prevX = clientX;
+        prevY = clientY;
         datas = {};
-        ((dragstart && dragstart({ datas, inputEvent: e })) === false) && (flag = false);
+        ((dragstart && dragstart({ datas, inputEvent: e, clientX, clientY })) === false) && (flag = false);
 
         flag && e.preventDefault();
     }
@@ -31,8 +37,20 @@ export default function setDrag(el: Element, options: DragOptions) {
         }
 
         const { clientX, clientY } = getPosition(e);
+        isDrag = true;
+        drag && drag({
+            datas,
+            clientX,
+            clientY,
+            distX: clientX - startX,
+            distY: clientY - startY,
+            deltaX: clientX - prevX,
+            deltaY: clientY - prevY,
+            inputEvent: e,
+        });
 
-        drag && drag({clientX, clientY, deltaX: clientX - startX, deltaY: clientY - startY, datas, inputEvent: e });
+        prevX = clientX;
+        prevY = clientY;
     }
     function onDragEnd(e) {
         if (!flag) {
@@ -40,7 +58,15 @@ export default function setDrag(el: Element, options: DragOptions) {
         }
         flag = false;
 
-        dragend && dragend({ datas, inputEvent: e });
+        dragend && dragend({
+            datas,
+            isDrag,
+            inputEvent: e,
+            clientX: prevX,
+            clientY: prevY,
+            distX: prevX - startX,
+            distY: prevY - startY,
+        });
     }
 
     if (isMouse) {

@@ -1,6 +1,6 @@
 {
   "name": "@daybrush/drag",
-  "version": "0.2.0",
+  "version": "0.4.1",
   "description": "add drag event",
   "main": "./dist/drag.js",
   "module": "./dist/drag.esm.js",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@daybrush/builder": "0.0.2",
-    "@daybrush/release": "^0.1.0",
+    "@daybrush/release": "^0.1.1",
     "tslint": "^5.15.0",
     "typescript": "^3.4.2"
   }
