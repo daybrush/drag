@@ -1,3 +1,3 @@
 
-export * from "./drag";
+export {default as drag} from "./drag";
 export * from "./types";
