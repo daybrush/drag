@@ -6,7 +6,9 @@ export default function setDrag(el: Element, options: DragOptions) {
     let startY = 0;
     let datas = {};
 
-    const { container = el, dragstart, drag, dragend } = options;
+    const { container = el, dragstart, drag, dragend, events = ["touch", "mouse"] } = options;
+    const isTouch = events.indexOf("touch") > -1;
+    const isMouse = events.indexOf("touch") > -1;
 
     function getPosition(e) {
         return e.touches && e.touches.length ? e.touches[0] : e;
@@ -19,7 +21,7 @@ export default function setDrag(el: Element, options: DragOptions) {
         startX = clientX;
         startY = clientY;
         datas = {};
-        ((dragstart && dragstart({ datas })) === false) && (flag = false);
+        ((dragstart && dragstart({ datas, inputEvent: e })) === false) && (flag = false);
 
         flag && e.preventDefault();
     }
@@ -30,22 +32,26 @@ export default function setDrag(el: Element, options: DragOptions) {
 
         const { clientX, clientY } = getPosition(e);
 
-        drag && drag({clientX, clientY, deltaX: clientX - startX, deltaY: clientY - startY, datas });
+        drag && drag({clientX, clientY, deltaX: clientX - startX, deltaY: clientY - startY, datas, inputEvent: e });
     }
-    function onDragEnd() {
+    function onDragEnd(e) {
         if (!flag) {
             return;
         }
         flag = false;
 
-        dragend && dragend({ datas });
+        dragend && dragend({ datas, inputEvent: e });
     }
 
-    el.addEventListener("mousedown", onDragStart);
-    el.addEventListener("touchstart", onDragStart);
-    container.addEventListener("mousemove", onDrag);
-    container.addEventListener("touchmove", onDrag);
-    container.addEventListener("mouseup", onDragEnd);
-    container.addEventListener("mouseleave", onDragEnd);
-    container.addEventListener("touchend", onDragEnd);
+    if (isMouse) {
+        el.addEventListener("mousedown", onDragStart);
+        container.addEventListener("mousemove", onDrag);
+        container.addEventListener("mouseup", onDragEnd);
+        // container.addEventListener("mouseleave", onDragEnd);
+    }
+    if (isTouch) {
+        el.addEventListener("touchstart", onDragStart);
+        container.addEventListener("touchmove", onDrag);
+        container.addEventListener("touchend", onDragEnd);
+    }
 }
