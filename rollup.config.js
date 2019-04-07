@@ -17,14 +17,14 @@ export default builder([
   {
     name: "utils",
     input: "src/index.ts",
-    output: "./dist/drag.js",
+    output: "./dist/drag.pkgd.js",
     resolve: true,
     exports: "named",
   },
   {
     name: "utils",
     input: "src/index.ts",
-    output: "./dist/drag.min.js",
+    output: "./dist/drag.pkgd.min.js",
     resolve: true,
     uglify: true,
     exports: "named",
