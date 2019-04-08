@@ -4,7 +4,7 @@ name: @daybrush/drag
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/drag.git
-version: 0.4.1
+version: 0.4.2
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
@@ -65,15 +65,22 @@ version: 0.4.1
             clientX = _a.clientX,
             clientY = _a.clientY;
 
+        var deltaX = clientX - prevX;
+        var deltaY = clientY - prevY;
+
+        if (!deltaX && !deltaY) {
+          return;
+        }
+
         isDrag = true;
         drag && drag({
           datas: datas,
           clientX: clientX,
           clientY: clientY,
+          deltaX: deltaX,
+          deltaY: deltaY,
           distX: clientX - startX,
           distY: clientY - startY,
-          deltaX: clientX - prevX,
-          deltaY: clientY - prevY,
           inputEvent: e
         });
         prevX = clientX;
