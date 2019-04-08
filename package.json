@@ -1,6 +1,6 @@
 {
   "name": "@daybrush/drag",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "add drag event",
   "main": "./dist/drag.js",
   "module": "./dist/drag.esm.js",
