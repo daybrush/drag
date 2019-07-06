@@ -79,11 +79,25 @@ export default function setDrag(el: Element, options: DragOptions) {
         el.addEventListener("mousedown", onDragStart);
         container.addEventListener("mousemove", onDrag);
         container.addEventListener("mouseup", onDragEnd);
-        // container.addEventListener("mouseleave", onDragEnd);
     }
     if (isTouch) {
         el.addEventListener("touchstart", onDragStart);
         container.addEventListener("touchmove", onDrag);
         container.addEventListener("touchend", onDragEnd);
     }
+
+    return {
+        unset() {
+            if (isMouse) {
+                el.removeEventListener("mousedown", onDragStart);
+                container.removeEventListener("mousemove", onDrag);
+                container.removeEventListener("mouseup", onDragEnd);
+            }
+            if (isTouch) {
+                el.removeEventListener("touchstart", onDragStart);
+                container.removeEventListener("touchmove", onDrag);
+                container.removeEventListener("touchend", onDragEnd);
+            }
+        },
+    };
 }

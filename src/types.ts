@@ -4,9 +4,10 @@ export interface DragOptions {
     container?: Window | Node | Element;
     events?: Array<"mouse" | "touch">;
     dragstart?: (options: {
-        datas: IObject<any>, inputEvent: any,
+        datas: IObject<any>,
         clientX: number,
         clientY: number,
+        inputEvent: any,
     }) => any;
     drag?: (options: {
         datas: IObject<any>,
@@ -14,7 +15,10 @@ export interface DragOptions {
         distY: number,
         deltaX: number,
         deltaY: number,
-        clientX: number, clientY: number, inputEvent}) => any;
+        clientX: number,
+        clientY: number,
+        inputEvent: any,
+    }) => any;
     dragend?: (options: {
         isDrag: boolean,
         datas: IObject<any>,
@@ -24,4 +28,4 @@ export interface DragOptions {
         distX: number,
         distY: number,
     }) => any;
-  }
+}

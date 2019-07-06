@@ -1,5 +1,3 @@
-![](./demo/images/logo.png)
-
 <p align="middle" ><img src="https://github.com/daybrush/drag/raw/master/demo/images/logo.png" /></p>
 
 <h2 align="middle">Drag</h2>
@@ -16,7 +14,7 @@ $ npm i @daybrush/drag
 ```
 
 ```html
-<script src="https://daybrush.com/drag/release/latest/dist/drag.pkgd.min.js"></script>
+<script src="https://daybrush.com/drag/release/latest/dist/drag.min.js"></script>
 ```
 
 
@@ -52,7 +50,7 @@ interface DragOptions {
         distY: number,
     }) => any;
 }
-drag(document.querySelector(".target"), {
+const dragger = drag(document.querySelector(".target"), {
     container: window,
     dragstart: ({ inputEvent }) => {
         inputEvent.stopPropagation();
@@ -64,6 +62,9 @@ drag(document.querySelector(".target"), {
         console.log (isDrag);
     },
 });
+
+// remove event
+dragger.unset();
 ```
 
 ## 👏 Contributing
