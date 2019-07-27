@@ -1,6 +1,6 @@
 {
   "name": "@daybrush/drag",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "You can set up drag events in any browser.",
   "main": "./dist/drag.js",
   "module": "./dist/drag.esm.js",
@@ -13,11 +13,11 @@
     "release:init": "npm run build && release -i"
   },
   "keywords": [
-      "drag",
-      "dom",
-      "daybrush",
-      "touch",
-      "mouse"
+    "drag",
+    "dom",
+    "daybrush",
+    "touch",
+    "mouse"
   ],
   "repository": {
     "type": "git",
@@ -34,5 +34,8 @@
     "@daybrush/release": "^0.2.4",
     "tslint": "^5.15.0",
     "typescript": "^3.4.2"
+  },
+  "dependencies": {
+    "@daybrush/utils": "^0.10.0"
   }
 }
