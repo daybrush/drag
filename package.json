@@ -1,13 +1,14 @@
 {
   "name": "@daybrush/drag",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "You can set up drag events in any browser.",
-  "main": "./dist/drag.js",
+  "main": "./dist/drag.cjs.js",
   "module": "./dist/drag.esm.js",
   "sideEffects": false,
   "types": "declaration/index.d.ts",
   "scripts": {
-    "build": "rollup -c && npm run declaration",
+    "start": "rollup -c -w",
+    "build": "rollup -c && npm run declaration && print-sizes ./dist",
     "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
     "release": "npm run build && release",
     "release:init": "npm run build && release -i"
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@daybrush/builder": "^0.1.1",
     "@daybrush/release": "^0.2.4",
+    "print-sizes": "^0.1.0",
     "tslint": "^5.15.0",
     "typescript": "^3.4.2"
   },

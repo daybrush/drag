@@ -26,30 +26,15 @@ import { drag, DragOptions } from "@daybrush/drag";
 interface DragOptions {
     container?: Window | Node | Element;
     events?: Array<"mouse" | "touch">;
-    dragstart?: (options: {
-        datas: IObject<any>,
-        inputEvent: any,
-        clientX: number,
-        clientY: number,
-    }) => any;
-    drag?: (options: {
-        datas: IObject<any>,
-        distX: number,
-        distY: number,
-        deltaX: number,
-        deltaY: number,
-        clientX: number,
-        clientY: number, inputEvent}) => any;
-    dragend?: (options: {
-        isDrag: boolean,
-        datas: IObject<any>,
-        inputEvent: any,
-        clientX: number,
-        clientY: number,
-        distX: number,
-        distY: number,
-    }) => any;
+    preventRightClick?: boolean;
+    dragstart?: (options: OnDragStart) => any;
+    drag?: (options: OnDrag) => any;
+    dragend?: (options: OnDragEnd) => any;
+    pinchstart?: (options: OnPinchStart) => any;
+    pinch?: (options: OnPinch) => any;
+    pinchend?: (options: OnPinchEnd) => any;
 }
+
 const dragger = drag(document.querySelector(".target"), {
     container: window,
     dragstart: ({ inputEvent }) => {
@@ -59,8 +44,17 @@ const dragger = drag(document.querySelector(".target"), {
         console.log(distX, distY);
     },
     dragend: ({ isDrag }) => {
-        console.log (isDrag);
+        console.log(isDrag);
     },
+    pinchstart: ({ touches }) => {
+
+    },
+    pinch: ({ touches, scale, clientX, clientY }) => {
+
+    },
+    pinchend: ({ touches, clientX, clientY }) => {
+
+    }
 });
 
 // remove event
