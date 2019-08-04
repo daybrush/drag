@@ -35,6 +35,7 @@ export interface OnPinch extends Position {
     datas: IObject<any>;
     touches: Position[];
     scale: number;
+    distance: number;
     inputEvent: any;
 }
 export interface OnPinchEnd extends Position {

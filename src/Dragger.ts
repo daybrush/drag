@@ -182,10 +182,13 @@ export default class Dragger {
             getAverageClient(prevClients),
             getAverageClient(startClients),
         );
+        const distance = getDist(clients);
+        const startDistance = getDist(startClients);
         pinch({
             datas: this.datas,
             touches: getPositions(clients, prevClients, startClients),
-            scale: getDist(clients) / getDist(startClients),
+            scale: distance / startDistance,
+            distance,
             ...centerPosition,
             inputEvent: e,
         });
