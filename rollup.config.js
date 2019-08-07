@@ -28,6 +28,6 @@ export default builder([
     input: "src/index.umd.ts",
     output: "./dist/drag.cjs.js",
     format: "cjs",
-    exports: "named",
+    exports: "default",
   },
 ]);
