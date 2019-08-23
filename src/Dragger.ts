@@ -49,6 +49,9 @@ export default class Dragger {
         return this.isPinch;
     }
     public onDragStart = (e: any) => {
+        if (!this.flag && e.cancelable === false) {
+            return;
+        }
         if (!this.isDrag && isMultiTouch(e) && !this.pinchFlag) {
             this.onPinchStart(e);
         }
