@@ -6,7 +6,9 @@ author: Daybrush
 repository: git+https://github.com/daybrush/drag.git
 version: 0.8.1
 */
-import { removeEvent, addEvent } from '@daybrush/utils';
+'use strict';
+
+var utils = require('@daybrush/utils');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -237,15 +239,15 @@ function () {
     this.isMouse = events.indexOf("mouse") > -1;
 
     if (this.isMouse) {
-      addEvent(el, "mousedown", this.onDragStart);
-      addEvent(container, "mousemove", this.onDrag);
-      addEvent(container, "mouseup", this.onDragEnd);
+      utils.addEvent(el, "mousedown", this.onDragStart);
+      utils.addEvent(container, "mousemove", this.onDrag);
+      utils.addEvent(container, "mouseup", this.onDragEnd);
     }
 
     if (this.isTouch) {
-      addEvent(el, "touchstart", this.onDragStart);
-      addEvent(container, "touchmove", this.onDrag);
-      addEvent(container, "touchend", this.onDragEnd);
+      utils.addEvent(el, "touchstart", this.onDragStart);
+      utils.addEvent(container, "touchmove", this.onDrag);
+      utils.addEvent(container, "touchend", this.onDragEnd);
     }
   }
 
@@ -349,15 +351,15 @@ function () {
     var container = this.options.container;
 
     if (this.isMouse) {
-      removeEvent(el, "mousedown", this.onDragStart);
-      removeEvent(container, "mousemove", this.onDrag);
-      removeEvent(container, "mouseup", this.onDragEnd);
+      utils.removeEvent(el, "mousedown", this.onDragStart);
+      utils.removeEvent(container, "mousemove", this.onDrag);
+      utils.removeEvent(container, "mouseup", this.onDragEnd);
     }
 
     if (this.isTouch) {
-      removeEvent(el, "touchstart", this.onDragStart);
-      removeEvent(container, "touchmove", this.onDrag);
-      removeEvent(container, "touchend", this.onDragEnd);
+      utils.removeEvent(el, "touchstart", this.onDragStart);
+      utils.removeEvent(container, "touchmove", this.onDrag);
+      utils.removeEvent(container, "touchend", this.onDragEnd);
     }
   };
 
@@ -368,6 +370,7 @@ function setDrag(el, options) {
   return new Dragger(el, options);
 }
 
-export default Dragger;
-export { setDrag as drag };
-//# sourceMappingURL=drag.esm.js.map
+Dragger.drag = setDrag;
+
+exports.default = Dragger;
+//# sourceMappingURL=drag.cjs.js.map
