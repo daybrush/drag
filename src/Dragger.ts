@@ -4,7 +4,6 @@ import {
     isMultiTouch, getPinchDragPosition, getAverageClient, getDist,
 } from "./utils";
 import { addEvent, removeEvent } from "@daybrush/utils";
-import { start } from "repl";
 
 export default class Dragger {
     public options: DragOptions = {};
