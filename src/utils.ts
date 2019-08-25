@@ -1,16 +1,21 @@
 import { Client, Position } from "./types";
 import { IArrayFormat } from "@daybrush/utils";
 
-export function getPinchDragPosition(clients: Client[], prevClients: Client[], startClients: Client[]) {
+export function getPinchDragPosition(
+    clients: Client[],
+    prevClients: Client[],
+    startClients: Client[],
+    startPinchClients: Client[],
+) {
     const nowCenter = getAverageClient(clients);
     const prevCenter = getAverageClient(prevClients);
-    const startCenter = getAverageClient(startClients);
-    const pinchClient = getAddClient(startClients[0], getMinusClient(nowCenter, startCenter));
-    const pinchPrevClient = getAddClient(startClients[0], getMinusClient(prevCenter, startCenter));
+    const startCenter = getAverageClient(startPinchClients);
+    const pinchClient = getAddClient(startPinchClients[0], getMinusClient(nowCenter, startCenter));
+    const pinchPrevClient = getAddClient(startPinchClients[0], getMinusClient(prevCenter, startCenter));
 
     return getPosition(pinchClient, pinchPrevClient, startClients[0]);
 }
-export function isMultiTouch(e: any): boolean {
+export function isMultiTouch(e: any): e is TouchEvent {
     return e.touches && e.touches.length >= 2;
 }
 export function getPositionEvent(e: any): Client[] {
@@ -48,7 +53,7 @@ export function getPosition(client: Client, prevClient: Client, startClient: Cli
 export function getDist(clients: Client[]) {
     return Math.sqrt(
         Math.pow(clients[0].clientX - clients[1].clientX, 2)
-        + Math.pow(clients[0].clientY - clients[1].clientY, 2)
+        + Math.pow(clients[0].clientY - clients[1].clientY, 2),
     );
 }
 export function getPositions(clients: Client[], prevClients: Client[], startClients: Client[]): Position[] {

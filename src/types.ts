@@ -49,6 +49,7 @@ export interface DragOptions {
     container?: Window | Node | Element;
     events?: Array<"mouse" | "touch">;
     preventRightClick?: boolean;
+    pinchThreshold?: number;
     dragstart?: (options: OnDragStart) => any;
     drag?: (options: OnDrag) => any;
     dragend?: (options: OnDragEnd) => any;

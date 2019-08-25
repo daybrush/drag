@@ -16,11 +16,15 @@ export default class Dragger {
     private isTouch = false;
     private prevClients: Client[] = [];
     private startClients: Client[] = [];
+    private movement: number = 0;
+    private startPinchClients: Client[] = [];
+    private startDistance: number = 0;
 
     constructor(private el: Element, options: DragOptions = {}) {
         this.options = {
             container: el,
             preventRightClick: true,
+            pinchThreshold: 1,
             events: ["touch", "mouse"],
             ...options,
         };
@@ -51,8 +55,13 @@ export default class Dragger {
         if (!this.flag && e.cancelable === false) {
             return;
         }
-        if (!this.isDrag && isMultiTouch(e) && !this.pinchFlag) {
-            this.onPinchStart(e);
+        if (isMultiTouch(e)) {
+            if (!this.flag && (e.touches.length !== e.changedTouches.length)) {
+                return;
+            }
+            if (!this.pinchFlag) {
+                this.onPinchStart(e);
+            }
         }
         if (this.flag) {
             return;
@@ -64,6 +73,7 @@ export default class Dragger {
         this.startClients = clients;
         this.prevClients = clients;
         this.datas = {};
+        this.movement = 0;
 
         const position = getPosition(clients[0], this.prevClients[0], this.startClients[0]);
 
@@ -97,12 +107,14 @@ export default class Dragger {
         const prevClients = this.prevClients;
         const startClients = this.startClients;
         const position: Position = this.pinchFlag
-            ? getPinchDragPosition(clients, prevClients, startClients)
+            ? getPinchDragPosition(clients, prevClients, startClients, this.startPinchClients)
             : getPosition(clients[0], prevClients[0], startClients[0]);
 
-        if (!position.deltaX && !position.deltaY) {
+        const { deltaX, deltaY } = position;
+        if (!deltaX && !deltaY) {
             return;
         }
+        this.movement += Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         this.isDrag = true;
 
         const drag = this.options.drag;
@@ -127,7 +139,7 @@ export default class Dragger {
         const startClients = this.startClients;
 
         const position: Position = this.pinchFlag
-            ? getPinchDragPosition(prevClients, prevClients, startClients)
+            ? getPinchDragPosition(prevClients, prevClients, startClients, this.startPinchClients)
             : getPosition(prevClients[0], prevClients[0], startClients[0]);
 
         this.startClients = [];
@@ -140,19 +152,23 @@ export default class Dragger {
         });
     }
     public onPinchStart(e: TouchEvent) {
-        this.pinchFlag = true;
+        const { pinchstart, pinchThreshold } = this.options;
 
-        const pinchstart = this.options.pinchstart;
-
+        if (this.isDrag && this.movement > pinchThreshold!) {
+            return;
+        }
         const pinchClients = getClients(e.changedTouches);
 
+        this.pinchFlag = true;
         this.startClients.push(...pinchClients);
         this.prevClients.push(...pinchClients);
+        this.startDistance = getDist(this.prevClients);
+        this.startPinchClients = [...this.prevClients];
 
         if (!pinchstart) {
             return;
         }
-        const startClients = this.startClients;
+        const startClients = this.prevClients;
         const startAverageClient = getAverageClient(startClients);
         const centerPosition = getPosition(
             startAverageClient,
@@ -184,11 +200,10 @@ export default class Dragger {
             getAverageClient(startClients),
         );
         const distance = getDist(clients);
-        const startDistance = getDist(startClients);
         pinch({
             datas: this.datas,
             touches: getPositions(clients, prevClients, startClients),
-            scale: distance / startDistance,
+            scale: distance / this.startDistance,
             distance,
             ...centerPosition,
             inputEvent: e,
