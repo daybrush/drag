@@ -79,6 +79,8 @@ export default class Dragger {
                 inputEvent: e,
                 ...position,
             })) === false) {
+            this.startClients = [];
+            this.prevClients = [];
             this.flag = false;
         }
         this.flag && e.preventDefault();
