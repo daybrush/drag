@@ -24,7 +24,7 @@ export default class Dragger {
         this.options = {
             container: el,
             preventRightClick: true,
-            pinchThreshold: 1,
+            pinchThreshold: 0,
             events: ["touch", "mouse"],
             ...options,
         };
