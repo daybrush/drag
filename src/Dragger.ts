@@ -1,4 +1,4 @@
-import { DragOptions, Client, Position } from "./types";
+import { DragOptions, Client, Position, Delta, OnDrag } from "./types";
 import {
     getPositionEvent, getPosition, getClients, getPositions,
     isMultiTouch, getPinchDragPosition, getAverageClient, getDist,
@@ -19,6 +19,7 @@ export default class Dragger {
     private movement: number = 0;
     private startPinchClients: Client[] = [];
     private startDistance: number = 0;
+    private customDist = [0, 0];
 
     constructor(private el: Element, options: DragOptions = {}) {
         this.options = {
@@ -33,6 +34,7 @@ export default class Dragger {
 
         this.isTouch = events!.indexOf("touch") > -1;
         this.isMouse = events!.indexOf("mouse") > -1;
+        this.customDist = [0, 0];
 
         if (this.isMouse) {
             addEvent(el, "mousedown", this.onDragStart);
@@ -68,6 +70,7 @@ export default class Dragger {
         }
         const clients = this.startClients[0] ? this.startClients : getPositionEvent(e);
 
+        this.customDist = [0, 0];
         this.flag = true;
         this.isDrag = false;
         this.startClients = clients;
@@ -104,26 +107,48 @@ export default class Dragger {
         if (this.pinchFlag) {
             this.onPinch(e, clients);
         }
+        const result = this.move([0, 0], clients);
+
+        if (!result || (!result.deltaX && !result.deltaY)) {
+            return;
+        }
+        const drag = this.options.drag;
+
+        drag && drag({
+            ...result,
+            inputEvent: e,
+        });
+    }
+    public move([deltaX, deltaY]: number[], clients = this.prevClients): OnDrag | undefined {
+        const customDist = this.customDist;
         const prevClients = this.prevClients;
         const startClients = this.startClients;
         const position: Position = this.pinchFlag
             ? getPinchDragPosition(clients, prevClients, startClients, this.startPinchClients)
             : getPosition(clients[0], prevClients[0], startClients[0]);
 
-        const { deltaX, deltaY } = position;
-        if (!deltaX && !deltaY) {
-            return;
-        }
-        this.movement += Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        customDist[0] += deltaX;
+        customDist[1] += deltaY;
+        position.deltaX += deltaX;
+        position.deltaY += deltaY;
+
+        const {
+            deltaX: positionDeltaX,
+            deltaY: positionDeltaY,
+        } = position;
+
+        position.distX += customDist[0];
+        position.distY += customDist[1];
+
+        this.movement += Math.sqrt(positionDeltaX * positionDeltaX + positionDeltaY * positionDeltaY);
+        this.prevClients = clients;
         this.isDrag = true;
 
-        const drag = this.options.drag;
-        drag && drag({
+        return {
             datas: this.datas,
             ...position,
-            inputEvent: e,
-        });
-        this.prevClients = clients;
+            inputEvent: null,
+        };
     }
     public onDragEnd = (e: any) => {
         if (!this.flag) {
