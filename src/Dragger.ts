@@ -107,7 +107,7 @@ export default class Dragger {
         if (this.pinchFlag) {
             this.onPinch(e, clients);
         }
-        const result = this.move([0, 0], clients);
+        const result = this.move([0, 0], e, clients);
 
         if (!result || (!result.deltaX && !result.deltaY)) {
             return;
@@ -119,7 +119,7 @@ export default class Dragger {
             inputEvent: e,
         });
     }
-    public move([deltaX, deltaY]: number[], clients = this.prevClients): OnDrag | undefined {
+    public move([deltaX, deltaY]: number[], inputEvent: any, clients = this.prevClients): OnDrag | undefined {
         const customDist = this.customDist;
         const prevClients = this.prevClients;
         const startClients = this.startClients;
@@ -147,7 +147,7 @@ export default class Dragger {
         return {
             datas: this.datas,
             ...position,
-            inputEvent: null,
+            inputEvent,
         };
     }
     public onDragEnd = (e: any) => {
