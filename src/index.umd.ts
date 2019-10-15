@@ -1,6 +1,8 @@
 
-import Dragger from "./Dragger";
-import drag from "./drag";
+import Dragger, * as modules from "./index";
 
-(Dragger as any).drag = drag;
+for (const name in modules) {
+    (Dragger as any)[name] = (modules as any)[name];
+}
+
 export default Dragger;
