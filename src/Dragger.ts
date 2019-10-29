@@ -1,4 +1,4 @@
-import { DragOptions, Client, Position, Delta, OnDrag } from "./types";
+import { DragOptions, Client, Position, OnDrag } from "./types";
 import {
     getPositionEvent, getPosition, getClients, getPositions,
     isMultiTouch, getPinchDragPosition, getAverageClient, getDist,
@@ -53,6 +53,20 @@ export default class Dragger {
     public isPinching() {
         return this.isPinch;
     }
+    public scrollBy(deltaX: number, deltaY: number, e: any) {
+        if (!this.flag) {
+            return;
+        }
+        this.startClients.forEach(client => {
+            client.clientX -= deltaX;
+            client.clientY -= deltaY;
+        });
+        this.prevClients.forEach(client => {
+            client.clientX -= deltaX;
+            client.clientY -= deltaY;
+        });
+        this.onDrag(e, true);
+    }
     public onDragStart = (e: any) => {
         if (!this.flag && e.cancelable === false) {
             return;
@@ -98,7 +112,7 @@ export default class Dragger {
         }
         this.flag && e.preventDefault();
     }
-    public onDrag = (e: any) => {
+    public onDrag = (e: any, isScroll?: boolean) => {
         if (!this.flag) {
             return;
         }
@@ -116,6 +130,7 @@ export default class Dragger {
 
         drag && drag({
             ...result,
+            isScroll: !!isScroll,
             inputEvent: e,
         });
     }
@@ -147,6 +162,7 @@ export default class Dragger {
         return {
             datas: this.datas,
             ...position,
+            isScroll: false,
             inputEvent,
         };
     }

@@ -19,6 +19,7 @@ export interface OnDragStart extends Position {
 }
 export interface OnDrag extends Position {
     datas: IObject<any>;
+    isScroll: boolean;
     inputEvent: any;
 }
 export interface OnDragEnd extends Position {
