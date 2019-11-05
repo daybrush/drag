@@ -53,7 +53,7 @@ export default class Dragger {
     public isPinching() {
         return this.isPinch;
     }
-    public scrollBy(deltaX: number, deltaY: number, e: any) {
+    public scrollBy(deltaX: number, deltaY: number, e: any, isCallDrag: boolean = true) {
         if (!this.flag) {
             return;
         }
@@ -65,7 +65,7 @@ export default class Dragger {
             client.clientX -= deltaX;
             client.clientY -= deltaY;
         });
-        this.onDrag(e, true);
+        isCallDrag && this.onDrag(e, true);
     }
     public onDragStart = (e: any) => {
         if (!this.flag && e.cancelable === false) {
