@@ -42,9 +42,12 @@ export default class Dragger {
             addEvent(container!, "mouseup", this.onDragEnd);
         }
         if (this.isTouch) {
-            addEvent(el, "touchstart", this.onDragStart);
-            addEvent(container!, "touchmove", this.onDrag);
-            addEvent(container!, "touchend", this.onDragEnd);
+            const passive = {
+                passive: false,
+            };
+            addEvent(el, "touchstart", this.onDragStart, passive);
+            addEvent(container!, "touchmove", this.onDrag, passive);
+            addEvent(container!, "touchend", this.onDragEnd, passive);
         }
     }
     public isDragging() {
