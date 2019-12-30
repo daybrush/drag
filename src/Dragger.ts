@@ -5,7 +5,10 @@ import {
 } from "./utils";
 import { addEvent, removeEvent } from "@daybrush/utils";
 
-export default class Dragger {
+/**
+ * You can set up drag events in any browser.
+ */
+class Dragger {
     public options: DragOptions = {};
     private flag = false;
     private pinchFlag = false;
@@ -20,7 +23,9 @@ export default class Dragger {
     private startPinchClients: Client[] = [];
     private startDistance: number = 0;
     private customDist = [0, 0];
-
+    /**
+     *
+     */
     constructor(private el: Element, options: DragOptions = {}) {
         this.options = {
             container: el,
@@ -50,12 +55,21 @@ export default class Dragger {
             addEvent(container!, "touchend", this.onDragEnd, passive);
         }
     }
+    /**
+     *
+     */
     public isDragging() {
         return this.isDrag;
     }
+    /**
+     *
+     */
     public isPinching() {
         return this.isPinch;
     }
+    /**
+     *
+     */
     public scrollBy(deltaX: number, deltaY: number, e: any, isCallDrag: boolean = true) {
         if (!this.flag) {
             return;
@@ -70,6 +84,9 @@ export default class Dragger {
         });
         isCallDrag && this.onDrag(e, true);
     }
+    /**
+     * @method
+     */
     public onDragStart = (e: any) => {
         if (!this.flag && e.cancelable === false) {
             return;
@@ -283,6 +300,9 @@ export default class Dragger {
         this.isPinch = false;
         this.pinchFlag = false;
     }
+    /**
+     *
+     */
     public unset() {
         const el = this.el;
         const container = this.options.container!;
@@ -299,3 +319,5 @@ export default class Dragger {
         }
     }
 }
+
+export default Dragger;

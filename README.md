@@ -7,6 +7,7 @@
 <p align="middle">You can set up drag events in any browser.</p>
 
 
+* [API Documentation](https://daybrush.com/drag/release/latest/doc/)
 
 ## ⚙️ Installation
 ```sh
