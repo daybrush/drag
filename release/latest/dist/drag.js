@@ -166,9 +166,16 @@ version: 0.11.1
       el.removeEventListener(type, listener);
     }
 
+    /**
+     * You can set up drag events in any browser.
+     */
+
     var Dragger =
     /*#__PURE__*/
     function () {
+      /**
+       *
+       */
       function Dragger(el, options) {
         var _this = this;
 
@@ -191,6 +198,9 @@ version: 0.11.1
         this.startPinchClients = [];
         this.startDistance = 0;
         this.customDist = [0, 0];
+        /**
+         * @method
+         */
 
         this.onDragStart = function (e) {
           if (!_this.flag && e.cancelable === false) {
@@ -311,16 +321,28 @@ version: 0.11.1
           addEvent(container, "touchend", this.onDragEnd, passive);
         }
       }
+      /**
+       *
+       */
+
 
       var __proto = Dragger.prototype;
 
       __proto.isDragging = function () {
         return this.isDrag;
       };
+      /**
+       *
+       */
+
 
       __proto.isPinching = function () {
         return this.isPinch;
       };
+      /**
+       *
+       */
+
 
       __proto.scrollBy = function (deltaX, deltaY, e, isCallDrag) {
         if (isCallDrag === void 0) {
@@ -462,6 +484,10 @@ version: 0.11.1
         this.isPinch = false;
         this.pinchFlag = false;
       };
+      /**
+       *
+       */
+
 
       __proto.unset = function () {
         var el = this.el;
