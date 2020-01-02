@@ -30,6 +30,7 @@ class Dragger {
         this.options = {
             container: el,
             preventRightClick: true,
+            preventDefault: true,
             pinchThreshold: 0,
             events: ["touch", "mouse"],
             ...options,
@@ -60,6 +61,12 @@ class Dragger {
      */
     public isDragging() {
         return this.isDrag;
+    }
+    /**
+     *
+     */
+    public isFlag() {
+        return this.flag;
     }
     /**
      *
@@ -117,6 +124,7 @@ class Dragger {
         const {
             dragstart,
             preventRightClick,
+            preventDefault,
         } = this.options;
 
         if (
@@ -130,7 +138,7 @@ class Dragger {
             this.prevClients = [];
             this.flag = false;
         }
-        this.flag && e.preventDefault();
+        this.flag && preventDefault && e.preventDefault();
     }
     public onDrag = (e: any, isScroll?: boolean) => {
         if (!this.flag) {
