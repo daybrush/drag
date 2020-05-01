@@ -106,6 +106,15 @@ class Dragger {
         if (!this.flag && e.cancelable === false) {
             return;
         }
+        const { container, pinchOutside, dragstart, preventRightClick } = this.options;
+        const isTouch = this.isTouch;
+
+        if (!this.flag && isTouch && pinchOutside) {
+            addEvent(container!, "touchstart", this.onDragStart);
+        }
+        if (this.flag && isTouch && pinchOutside) {
+            removeEvent(container!, "touchstart", this.onDragStart);
+        }
         if (isMultiTouch(e)) {
             if (!this.flag && (e.touches.length !== e.changedTouches.length)) {
                 return;
@@ -128,12 +137,6 @@ class Dragger {
         this.movement = 0;
 
         const position = getPosition(clients[0], this.prevClients[0], this.startClients[0]);
-
-        const {
-            dragstart,
-            preventRightClick,
-            preventDefault,
-        } = this.options;
 
         if (
             (preventRightClick && e.which === 3)
@@ -208,12 +211,15 @@ class Dragger {
         if (!this.flag) {
             return;
         }
+        const { dragend, pinchOutside, container } = this.options;
+        if (this.isTouch && pinchOutside) {
+            removeEvent(container!, "touchstart", this.onDragStart);
+        }
         if (this.pinchFlag) {
             this.onPinchEnd(e);
         }
         this.flag = false;
 
-        const dragend = this.options.dragend;
         const prevClients = this.prevClients;
         const startClients = this.startClients;
 
@@ -329,16 +335,17 @@ class Dragger {
             targets.forEach(target => {
                 removeEvent(target, "mousedown", this.onDragStart);
             });
-            removeEvent(container as any, "mousemove", this.onDrag);
-            removeEvent(container as any, "mouseup", this.onDragEnd);
+            removeEvent(container, "mousemove", this.onDrag);
+            removeEvent(container, "mouseup", this.onDragEnd);
         }
         if (this.isTouch) {
             targets.forEach(target => {
                 removeEvent(target, "touchstart", this.onDragStart);
             });
-            removeEvent(container as any, "touchmove", this.onDrag);
-            removeEvent(container as any, "touchend", this.onDragEnd);
-            removeEvent(container as any, "touchcancel", this.onDragEnd);
+            removeEvent(container, "touchstart", this.onDragStart);
+            removeEvent(container, "touchmove", this.onDrag);
+            removeEvent(container, "touchend", this.onDragEnd);
+            removeEvent(container, "touchcancel", this.onDragEnd);
         }
     }
 }

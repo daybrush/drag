@@ -107,6 +107,7 @@ export interface DragOptions {
     preventRightClick?: boolean;
     preventDefault?: boolean;
     pinchThreshold?: number;
+    pinchOutside?: boolean;
     dragstart?: (options: OnDragStart) => any;
     drag?: (options: OnDrag) => any;
     dragend?: (options: OnDragEnd) => any;
