@@ -47,6 +47,8 @@ export interface OnDragStart extends Position {
  * @extends Dragger.Position
  */
 export interface OnDrag extends Position {
+    isDrag: boolean;
+    isPinch: boolean;
     datas: IObject<any>;
     isScroll: boolean;
     inputEvent: any;

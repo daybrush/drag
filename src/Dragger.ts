@@ -23,12 +23,14 @@ class Dragger {
     private startPinchClients: Client[] = [];
     private startDistance: number = 0;
     private customDist = [0, 0];
+    private targets: Array<Element | Window> = [];
     /**
      *
      */
-    constructor(private el: Element, options: DragOptions = {}) {
+    constructor(targets: Array<Element | Window> | Element | Window, options: DragOptions = {}) {
+        const elements = [].slice.call(targets) as Array<Element | Window> ;
         this.options = {
-            container: el,
+            container: elements.length > 1 ? window : elements[0],
             preventRightClick: true,
             preventDefault: true,
             pinchThreshold: 0,
@@ -41,9 +43,12 @@ class Dragger {
         this.isTouch = events!.indexOf("touch") > -1;
         this.isMouse = events!.indexOf("mouse") > -1;
         this.customDist = [0, 0];
+        this.targets = elements;
 
         if (this.isMouse) {
-            addEvent(el, "mousedown", this.onDragStart);
+            elements.forEach(el => {
+                addEvent(el, "mousedown", this.onDragStart);
+            });
             addEvent(container!, "mousemove", this.onDrag);
             addEvent(container!, "mouseup", this.onDragEnd);
         }
@@ -51,9 +56,12 @@ class Dragger {
             const passive = {
                 passive: false,
             };
-            addEvent(el, "touchstart", this.onDragStart, passive);
+            elements.forEach(el => {
+                addEvent(el, "touchstart", this.onDragStart, passive);
+            });
             addEvent(container!, "touchmove", this.onDrag, passive);
             addEvent(container!, "touchend", this.onDragEnd, passive);
+            addEvent(container!, "touchcancel", this.onDragEnd, passive);
         }
     }
     /**
@@ -138,7 +146,7 @@ class Dragger {
             this.prevClients = [];
             this.flag = false;
         }
-        this.flag && preventDefault && e.preventDefault();
+        this.flag && 1 && e.preventDefault();
     }
     public onDrag = (e: any, isScroll?: boolean) => {
         if (!this.flag) {
@@ -190,6 +198,8 @@ class Dragger {
         return {
             datas: this.datas,
             ...position,
+            isDrag: this.isDrag,
+            isPinch: this.isPinch,
             isScroll: false,
             inputEvent,
         };
@@ -252,7 +262,7 @@ class Dragger {
         });
     }
     public onPinch(e: TouchEvent, clients: Client[]) {
-        if (!this.flag || !this.pinchFlag) {
+        if (!this.flag || !this.pinchFlag || clients.length < 2) {
             return;
         }
         this.isPinch = true;
@@ -312,18 +322,23 @@ class Dragger {
      *
      */
     public unset() {
-        const el = this.el;
+        const targets = this.targets;
         const container = this.options.container!;
 
         if (this.isMouse) {
-            removeEvent(el, "mousedown", this.onDragStart);
+            targets.forEach(target => {
+                removeEvent(target, "mousedown", this.onDragStart);
+            });
             removeEvent(container as any, "mousemove", this.onDrag);
             removeEvent(container as any, "mouseup", this.onDragEnd);
         }
         if (this.isTouch) {
-            removeEvent(el, "touchstart", this.onDragStart);
+            targets.forEach(target => {
+                removeEvent(target, "touchstart", this.onDragStart);
+            });
             removeEvent(container as any, "touchmove", this.onDrag);
             removeEvent(container as any, "touchend", this.onDragEnd);
+            removeEvent(container as any, "touchcancel", this.onDragEnd);
         }
     }
 }

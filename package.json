@@ -1,6 +1,6 @@
 {
   "name": "@daybrush/drag",
-  "version": "0.12.0",
+  "version": "0.13.1",
   "description": "You can set up drag events in any browser.",
   "main": "./dist/drag.cjs.js",
   "module": "./dist/drag.esm.js",
@@ -43,6 +43,6 @@
     "typescript": "^3.4.2"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.10.0"
+    "@daybrush/utils": "^0.10.3"
   }
 }

@@ -10,8 +10,8 @@ export function getPinchDragPosition(
     const nowCenter = getAverageClient(clients);
     const prevCenter = getAverageClient(prevClients);
     const startCenter = getAverageClient(startPinchClients);
-    const pinchClient = getAddClient(startPinchClients[0], getMinusClient(nowCenter, startCenter));
-    const pinchPrevClient = getAddClient(startPinchClients[0], getMinusClient(prevCenter, startCenter));
+    const pinchClient = plueClient(startPinchClients[0], minusClient(nowCenter, startCenter));
+    const pinchPrevClient = plueClient(startPinchClients[0], minusClient(prevCenter, startCenter));
 
     return getPosition(pinchClient, pinchPrevClient, startClients[0]);
 }
@@ -75,19 +75,22 @@ export function getClient(e: MouseEvent | Touch): Client {
     };
 }
 export function getAverageClient(clients: Client[]) {
+    if (clients.length === 1) {
+        return clients[0];
+    }
     return {
         clientX: (clients[0].clientX + clients[1].clientX) / 2,
         clientY: (clients[0].clientY + clients[1].clientY) / 2,
     };
 }
-export function getAddClient(client1: Client, client2: Client) {
+export function plueClient(client1: Client, client2: Client) {
     return {
         clientX: (client1.clientX + client2.clientX),
         clientY: (client1.clientY + client2.clientY),
     };
 }
 
-export function getMinusClient(client1: Client, client2: Client) {
+export function minusClient(client1: Client, client2: Client) {
     return {
         clientX: (client1.clientX - client2.clientX),
         clientY: (client1.clientY - client2.clientY),
