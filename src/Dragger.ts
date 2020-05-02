@@ -28,7 +28,7 @@ class Dragger {
      *
      */
     constructor(targets: Array<Element | Window> | Element | Window, options: DragOptions = {}) {
-        const elements = [].slice.call(targets) as Array<Element | Window> ;
+        const elements = [].concat(targets as any) as Array<Element | Window> ;
         this.options = {
             container: elements.length > 1 ? window : elements[0],
             preventRightClick: true,
@@ -110,7 +110,9 @@ class Dragger {
         const isTouch = this.isTouch;
 
         if (!this.flag && isTouch && pinchOutside) {
-            addEvent(container!, "touchstart", this.onDragStart);
+            setTimeout(() => {
+                addEvent(container!, "touchstart", this.onDragStart);
+            });
         }
         if (this.flag && isTouch && pinchOutside) {
             removeEvent(container!, "touchstart", this.onDragStart);
@@ -141,6 +143,7 @@ class Dragger {
         if (
             (preventRightClick && e.which === 3)
             || (dragstart && dragstart({
+                type: "dragstart",
                 datas: this.datas,
                 inputEvent: e,
                 ...position,
@@ -149,7 +152,7 @@ class Dragger {
             this.prevClients = [];
             this.flag = false;
         }
-        this.flag && 1 && e.preventDefault();
+        this.flag && e.preventDefault();
     }
     public onDrag = (e: any, isScroll?: boolean) => {
         if (!this.flag) {
@@ -199,6 +202,7 @@ class Dragger {
         this.isDrag = true;
 
         return {
+            type: "drag",
             datas: this.datas,
             ...position,
             isDrag: this.isDrag,
@@ -230,6 +234,7 @@ class Dragger {
         this.startClients = [];
         this.prevClients = [];
         dragend && dragend({
+            type: "dragend",
             datas: this.datas,
             isDrag: this.isDrag,
             inputEvent: e,
@@ -261,6 +266,7 @@ class Dragger {
             startAverageClient,
         );
         pinchstart({
+            type: "pinchstart",
             datas: this.datas,
             touches: getPositions(startClients, startClients, startClients),
             ...centerPosition,
@@ -286,6 +292,7 @@ class Dragger {
         );
         const distance = getDist(clients);
         pinch({
+            type: "pinch",
             datas: this.datas,
             touches: getPositions(clients, prevClients, startClients),
             scale: distance / this.startDistance,
@@ -315,6 +322,7 @@ class Dragger {
             getAverageClient(startClients),
         );
         pinchend({
+            type: "pinchend",
             datas: this.datas,
             isPinch,
             touches: getPositions(prevClients, prevClients, startClients),

@@ -4,6 +4,14 @@ import { IObject } from "@daybrush/utils";
  * @typedef
  * @memberof Dragger
  */
+export interface Event {
+    type: string;
+}
+
+/**
+ * @typedef
+ * @memberof Dragger
+ */
 export interface Client {
     clientX: number;
     clientY: number;
@@ -36,8 +44,9 @@ export interface Position extends Client, Dist, Delta {}
  * @typedef
  * @memberof Dragger
  * @extends Dragger.Position
+ * @extends Dragger.Event
  */
-export interface OnDragStart extends Position {
+export interface OnDragStart extends Position, Event {
     datas: IObject<any>;
     inputEvent: any;
 }
@@ -45,8 +54,9 @@ export interface OnDragStart extends Position {
  * @typedef
  * @memberof Dragger
  * @extends Dragger.Position
+ * @extends Dragger.Event
  */
-export interface OnDrag extends Position {
+export interface OnDrag extends Position, Event {
     isDrag: boolean;
     isPinch: boolean;
     datas: IObject<any>;
@@ -57,8 +67,9 @@ export interface OnDrag extends Position {
  * @typedef
  * @memberof Dragger
  * @extends Dragger.Position
+ * @extends Dragger.Event
  */
-export interface OnDragEnd extends Position {
+export interface OnDragEnd extends Position, Event {
     isDrag: boolean;
     datas: IObject<any>;
     inputEvent: any;
@@ -67,8 +78,9 @@ export interface OnDragEnd extends Position {
  * @typedef
  * @memberof Dragger
  * @extends Dragger.Position
+ * @extends Dragger.Event
  */
-export interface OnPinchStart extends Position {
+export interface OnPinchStart extends Position, Event {
     datas: IObject<any>;
     touches: Position[];
     inputEvent: any;
@@ -77,8 +89,9 @@ export interface OnPinchStart extends Position {
  * @typedef
  * @memberof Dragger
  * @extends Dragger.Position
+ * @extends Dragger.Event
  */
-export interface OnPinch extends Position {
+export interface OnPinch extends Position, Event {
     datas: IObject<any>;
     touches: Position[];
     scale: number;
@@ -89,8 +102,9 @@ export interface OnPinch extends Position {
  * @typedef
  * @memberof Dragger
  * @extends Dragger.Position
+ * @extends Dragger.Event
  */
-export interface OnPinchEnd extends Position {
+export interface OnPinchEnd extends Position, Event {
     isPinch: boolean;
     datas: IObject<any>;
     touches: Position[];
