@@ -79,6 +79,12 @@ class Dragger {
     /**
      *
      */
+    public isPinchFlag() {
+        return this.pinchFlag;
+    }
+    /**
+     *
+     */
     public isPinching() {
         return this.isPinch;
     }
@@ -205,6 +211,7 @@ class Dragger {
             type: "drag",
             datas: this.datas,
             ...position,
+            movement: this.movement,
             isDrag: this.isDrag,
             isPinch: this.isPinch,
             isScroll: false,
@@ -294,6 +301,7 @@ class Dragger {
         pinch({
             type: "pinch",
             datas: this.datas,
+            movement: this.movement,
             touches: getPositions(clients, prevClients, startClients),
             scale: distance / this.startDistance,
             distance,

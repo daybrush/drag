@@ -59,6 +59,7 @@ export interface OnDragStart extends Position, Event {
 export interface OnDrag extends Position, Event {
     isDrag: boolean;
     isPinch: boolean;
+    movement: number;
     datas: IObject<any>;
     isScroll: boolean;
     inputEvent: any;
@@ -96,6 +97,7 @@ export interface OnPinch extends Position, Event {
     touches: Position[];
     scale: number;
     distance: number;
+    movement: number;
     inputEvent: any;
 }
 /**
