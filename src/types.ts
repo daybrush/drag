@@ -72,6 +72,7 @@ export interface OnDrag extends Position, Event {
  */
 export interface OnDragEnd extends Position, Event {
     isDrag: boolean;
+    isDouble: boolean;
     datas: IObject<any>;
     inputEvent: any;
 }

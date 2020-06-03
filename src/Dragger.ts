@@ -3,7 +3,7 @@ import {
     getPositionEvent, getPosition, getClients, getPositions,
     isMultiTouch, getPinchDragPosition, getAverageClient, getDist,
 } from "./utils";
-import { addEvent, removeEvent } from "@daybrush/utils";
+import { addEvent, removeEvent, now } from "@daybrush/utils";
 
 /**
  * You can set up drag events in any browser.
@@ -24,6 +24,8 @@ class Dragger {
     private startDistance: number = 0;
     private customDist = [0, 0];
     private targets: Array<Element | Window> = [];
+    private prevTime: number = 0;
+    private isDouble: boolean = false;
     /**
      *
      */
@@ -112,7 +114,7 @@ class Dragger {
         if (!this.flag && e.cancelable === false) {
             return;
         }
-        const { container, pinchOutside, dragstart, preventRightClick } = this.options;
+        const { container, pinchOutside, dragstart, preventRightClick, preventDefault } = this.options;
         const isTouch = this.isTouch;
 
         if (!this.flag && isTouch && pinchOutside) {
@@ -147,7 +149,7 @@ class Dragger {
         const position = getPosition(clients[0], this.prevClients[0], this.startClients[0]);
 
         if (
-            (preventRightClick && e.which === 3)
+            (preventRightClick && (e.which === 3 || e.button === 2))
             || (dragstart && dragstart({
                 type: "dragstart",
                 datas: this.datas,
@@ -158,7 +160,8 @@ class Dragger {
             this.prevClients = [];
             this.flag = false;
         }
-        this.flag && e.preventDefault();
+        this.isDouble = now() - this.prevTime < 200;
+        this.flag && preventDefault && e.preventDefault();
     }
     public onDrag = (e: any, isScroll?: boolean) => {
         if (!this.flag) {
@@ -238,11 +241,17 @@ class Dragger {
             ? getPinchDragPosition(prevClients, prevClients, startClients, this.startPinchClients)
             : getPosition(prevClients[0], prevClients[0], startClients[0]);
 
+        const currentTime = now();
+        const isDouble = !this.isDrag && this.isDouble;
+
+        this.prevTime = this.isDrag || isDouble ? 0 : currentTime;
         this.startClients = [];
         this.prevClients = [];
+
         dragend && dragend({
             type: "dragend",
             datas: this.datas,
+            isDouble,
             isDrag: this.isDrag,
             inputEvent: e,
             ...position,
