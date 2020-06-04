@@ -53,6 +53,7 @@ class Dragger {
             });
             addEvent(container!, "mousemove", this.onDrag);
             addEvent(container!, "mouseup", this.onDragEnd);
+            addEvent(container!, "contextmenu", this.onDragEnd);
         }
         if (this.isTouch) {
             const passive = {
