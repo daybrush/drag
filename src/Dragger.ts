@@ -362,6 +362,7 @@ class Dragger {
             });
             removeEvent(container, "mousemove", this.onDrag);
             removeEvent(container, "mouseup", this.onDragEnd);
+            removeEvent(container, "contextmenu", this.onDragEnd);
         }
         if (this.isTouch) {
             targets.forEach(target => {
