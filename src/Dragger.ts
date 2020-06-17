@@ -1,7 +1,7 @@
 import { DragOptions, Client, Position, OnDrag } from "./types";
 import {
     getPositionEvent, getPosition, getClients, getPositions,
-    isMultiTouch, getPinchDragPosition, getAverageClient, getDist,
+    isMultiTouch, getPinchDragPosition, getAverageClient, getDist, getRotatiion,
 } from "./utils";
 import { addEvent, removeEvent, now } from "@daybrush/utils";
 
@@ -26,6 +26,7 @@ class Dragger {
     private targets: Array<Element | Window> = [];
     private prevTime: number = 0;
     private isDouble: boolean = false;
+    private startRotate = 0;
     /**
      *
      */
@@ -282,9 +283,12 @@ class Dragger {
             startAverageClient,
             startAverageClient,
         );
+
+        this.startRotate = getRotatiion(startClients);
         pinchstart({
             type: "pinchstart",
             datas: this.datas,
+            angle: this.startRotate,
             touches: getPositions(startClients, startClients, startClients),
             ...centerPosition,
             inputEvent: e,
@@ -307,11 +311,14 @@ class Dragger {
             getAverageClient(prevClients),
             getAverageClient(startClients),
         );
+        const angle = getRotatiion(clients);
         const distance = getDist(clients);
         pinch({
             type: "pinch",
             datas: this.datas,
             movement: this.movement,
+            angle,
+            rotation: angle - this.startRotate,
             touches: getPositions(clients, prevClients, startClients),
             scale: distance / this.startDistance,
             distance,

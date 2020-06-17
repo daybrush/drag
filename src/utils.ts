@@ -1,6 +1,24 @@
 import { Client, Position } from "./types";
 import { IArrayFormat } from "@daybrush/utils";
 
+export function getRad(pos1: number[], pos2: number[]) {
+    const distX = pos2[0] - pos1[0];
+    const distY = pos2[1] - pos1[1];
+    const rad = Math.atan2(distY, distX);
+
+    return rad >= 0 ? rad : rad + Math.PI * 2;
+}
+
+export function getRotatiion(touches: Client[]) {
+    return getRad([
+        touches[0].clientX,
+        touches[0].clientY,
+    ], [
+        touches[1].clientX,
+        touches[1].clientY,
+    ]) / Math.PI * 180;
+}
+
 export function getPinchDragPosition(
     clients: Client[],
     prevClients: Client[],

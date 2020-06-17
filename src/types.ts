@@ -85,6 +85,7 @@ export interface OnDragEnd extends Position, Event {
 export interface OnPinchStart extends Position, Event {
     datas: IObject<any>;
     touches: Position[];
+    angle: number;
     inputEvent: any;
 }
 /**
@@ -96,6 +97,8 @@ export interface OnPinchStart extends Position, Event {
 export interface OnPinch extends Position, Event {
     datas: IObject<any>;
     touches: Position[];
+    rotation: number;
+    angle: number;
     scale: number;
     distance: number;
     movement: number;
