@@ -5,6 +5,7 @@ import {
 } from "./utils";
 import { addEvent, removeEvent, now } from "@daybrush/utils";
 
+const INPUT_TAGNAMES = ["textarea", "input"];
 /**
  * You can set up drag events in any browser.
  */
@@ -33,6 +34,7 @@ class Dragger {
     constructor(targets: Array<Element | Window> | Element | Window, options: DragOptions = {}) {
         const elements = [].concat(targets as any) as Array<Element | Window> ;
         this.options = {
+            checkInput: true,
             container: elements.length > 1 ? window : elements[0],
             preventRightClick: true,
             preventDefault: true,
@@ -116,9 +118,17 @@ class Dragger {
         if (!this.flag && e.cancelable === false) {
             return;
         }
-        const { container, pinchOutside, dragstart, preventRightClick, preventDefault } = this.options;
+        const { container, pinchOutside, dragstart, preventRightClick, preventDefault, checkInput } = this.options;
         const isTouch = this.isTouch;
 
+        if (!this.flag && checkInput) {
+            const target = e.target as HTMLElement;
+            const tagName = target.tagName.toLowerCase();
+
+            if (INPUT_TAGNAMES.indexOf(tagName) > -1 || target.isContentEditable) {
+                return false;
+            }
+        }
         if (!this.flag && isTouch && pinchOutside) {
             setTimeout(() => {
                 addEvent(container!, "touchstart", this.onDragStart);
@@ -150,17 +160,18 @@ class Dragger {
 
         const position = getPosition(clients[0], this.prevClients[0], this.startClients[0]);
 
-        if (
-            (preventRightClick && (e.which === 3 || e.button === 2))
-            || (dragstart && dragstart({
-                type: "dragstart",
-                datas: this.datas,
-                inputEvent: e,
-                ...position,
-            })) === false) {
-            this.startClients = [];
-            this.prevClients = [];
-            this.flag = false;
+        if (preventRightClick && (e.which === 3 || e.button === 2)) {
+            this.initDrag();
+            return false;
+        }
+        const result = dragstart && dragstart({
+            type: "dragstart",
+            datas: this.datas,
+            inputEvent: e,
+            ...position,
+        });
+        if (result === false) {
+            this.initDrag();
         }
         this.isDouble = now() - this.prevTime < 200;
         this.flag && preventDefault && e.preventDefault();
@@ -381,6 +392,11 @@ class Dragger {
             removeEvent(container, "touchend", this.onDragEnd);
             removeEvent(container, "touchcancel", this.onDragEnd);
         }
+    }
+    private initDrag() {
+        this.startClients = [];
+        this.prevClients = [];
+        this.flag = false;
     }
 }
 
