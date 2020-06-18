@@ -34,7 +34,7 @@ class Dragger {
     constructor(targets: Array<Element | Window> | Element | Window, options: DragOptions = {}) {
         const elements = [].concat(targets as any) as Array<Element | Window>;
         this.options = {
-            checkInput: true,
+            checkInput: false,
             container: elements.length > 1 ? window : elements[0],
             preventRightClick: true,
             preventDefault: true,
@@ -121,17 +121,26 @@ class Dragger {
         const { container, pinchOutside, dragstart, preventRightClick, preventDefault, checkInput } = this.options;
         const isTouch = this.isTouch;
 
-        if (!this.flag && checkInput) {
+        if (!this.flag) {
             const activeElement = document.activeElement as HTMLElement;
             const target = e.target as HTMLElement;
             const tagName = target.tagName.toLowerCase();
+            const hasInput = INPUT_TAGNAMES.indexOf(tagName) > -1;
+            const hasContentEditable = target.isContentEditable;
 
-            if (
-                (INPUT_TAGNAMES.indexOf(tagName) > -1 && activeElement === target)
-                || (activeElement && target.isContentEditable && activeElement.isContentEditable
-                    && (activeElement === target || activeElement.contains(target)))
-            ) {
-                return false;
+            if (hasInput || hasContentEditable) {
+                if (checkInput || activeElement === target) {
+                    // force false or already focused.
+                    return false;
+                }
+                if (
+                    activeElement
+                    && hasContentEditable
+                    && activeElement.isContentEditable
+                    && activeElement.contains(target)
+                ) {
+                    return false;
+                }
             }
         }
         if (!this.flag && isTouch && pinchOutside) {
