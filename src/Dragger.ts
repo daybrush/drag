@@ -32,7 +32,7 @@ class Dragger {
      *
      */
     constructor(targets: Array<Element | Window> | Element | Window, options: DragOptions = {}) {
-        const elements = [].concat(targets as any) as Array<Element | Window> ;
+        const elements = [].concat(targets as any) as Array<Element | Window>;
         this.options = {
             checkInput: true,
             container: elements.length > 1 ? window : elements[0],
@@ -122,10 +122,15 @@ class Dragger {
         const isTouch = this.isTouch;
 
         if (!this.flag && checkInput) {
+            const activeElement = document.activeElement as HTMLElement;
             const target = e.target as HTMLElement;
             const tagName = target.tagName.toLowerCase();
 
-            if (INPUT_TAGNAMES.indexOf(tagName) > -1 || target.isContentEditable) {
+            if (
+                (INPUT_TAGNAMES.indexOf(tagName) > -1 && activeElement === target)
+                || (activeElement && target.isContentEditable && activeElement.isContentEditable
+                    && (activeElement === target || activeElement.contains(target)))
+            ) {
                 return false;
             }
         }
