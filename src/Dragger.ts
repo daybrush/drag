@@ -141,11 +141,16 @@ class Dragger {
                 ) {
                     return false;
                 }
+            } else if ((preventDefault || e.type === "touchstart") && activeElement) {
+                const activeTagName = activeElement.tagName;
+                if (activeElement.isContentEditable || INPUT_TAGNAMES.indexOf(activeTagName) > -1) {
+                    activeElement.blur();
+                }
             }
         }
         if (!this.flag && isTouch && pinchOutside) {
             setTimeout(() => {
-                addEvent(container!, "touchstart", this.onDragStart);
+                addEvent(container!, "touchstart", this.onDragStart, { passive: false });
             });
         }
         if (this.flag && isTouch && pinchOutside) {
