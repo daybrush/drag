@@ -49,6 +49,7 @@ export interface Position extends Client, Dist, Delta {}
 export interface OnDragStart extends Position, Event {
     datas: IObject<any>;
     inputEvent: any;
+    isTrusted: any;
 }
 /**
  * @typedef

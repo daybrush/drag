@@ -114,7 +114,7 @@ class Dragger {
     /**
      * @method
      */
-    public onDragStart = (e: any) => {
+    public onDragStart = (e: any, isTrusted = true) => {
         if (!this.flag && e.cancelable === false) {
             return;
         }
@@ -187,6 +187,7 @@ class Dragger {
             type: "dragstart",
             datas: this.datas,
             inputEvent: e,
+            isTrusted,
             ...position,
         });
         if (result === false) {
@@ -386,6 +387,9 @@ class Dragger {
         });
         this.isPinch = false;
         this.pinchFlag = false;
+    }
+    public triggerDragStart(e: any) {
+        this.onDragStart(e, false);
     }
     /**
      *
