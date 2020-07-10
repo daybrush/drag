@@ -148,8 +148,10 @@ class Dragger {
                 }
             }
         }
+        let timer = 0;
+
         if (!this.flag && isTouch && pinchOutside) {
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 addEvent(container!, "touchstart", this.onDragStart, { passive: false });
             });
         }
@@ -157,6 +159,7 @@ class Dragger {
             removeEvent(container!, "touchstart", this.onDragStart);
         }
         if (isMultiTouch(e)) {
+            clearTimeout(timer);
             if (!this.flag && (e.touches.length !== e.changedTouches.length)) {
                 return;
             }
@@ -180,6 +183,7 @@ class Dragger {
         const position = getPosition(clients[0], this.prevClients[0], this.startClients[0]);
 
         if (preventRightClick && (e.which === 3 || e.button === 2)) {
+            clearTimeout(timer);
             this.initDrag();
             return false;
         }
@@ -191,6 +195,7 @@ class Dragger {
             ...position,
         });
         if (result === false) {
+            clearTimeout(timer);
             this.initDrag();
         }
         this.isDouble = now() - this.prevTime < 200;
